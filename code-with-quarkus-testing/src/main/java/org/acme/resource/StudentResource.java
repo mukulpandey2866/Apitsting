@@ -26,4 +26,4 @@ public class StudentResource {
     }
 
 }
-
+//http://127.0.0.1:9000/localproxy-5520869e.pac   proxy
