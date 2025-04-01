@@ -24,4 +24,5 @@ public class StudentResource {
         List<Student> studentList = studentRepository.listAll();
         return Response.ok(studentList).build();
     }
+
 }
