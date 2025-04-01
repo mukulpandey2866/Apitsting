@@ -1,5 +1,7 @@
 package org.acme.entity;
 
+import jakarta.persistence.Entity;
+
 import javax.annotation.processing.Generated;
 
 @Entity
