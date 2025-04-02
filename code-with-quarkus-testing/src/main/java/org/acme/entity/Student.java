@@ -37,4 +37,5 @@ public class Student {
     public void setBranch(String branch) {
         this.branch = branch;
     }
+
 }
