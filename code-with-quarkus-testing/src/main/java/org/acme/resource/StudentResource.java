@@ -1,11 +1,16 @@
 package org.acme.resource;
 
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.net.URI;
 import java.util.ArrayList;
 import org.acme.entity.Student;
 import org.acme.repository.StudentRepository;
@@ -13,6 +18,8 @@ import org.acme.repository.StudentRepository;
 import java.util.List;
 
 @Path("/")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)  // now it applies to the entire class
 public class StudentResource {
 
     @Inject
@@ -39,6 +46,57 @@ public class StudentResource {
         });
         return Response.ok(csStudentList).build();
     }
+
+    @POST
+    @Path("/addStudent")
+    @Transactional // to save and all
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)   // applies to the entire class
+    public Response addStudent(Student student) {
+        studentRepository.isPersistent(student);
+        if(studentRepository.isPersistent(student)){
+            //localhost://8080/student/id
+            return Response.created(URI.create("/student/" + student.getStudentId())).build();
+        }
+        return Response.ok(Response.status(Response.Status.BAD_REQUEST)).build();
+
+
+    }
+
+
+    @GET
+    @Path("/student/{id}")
+    @Transactional
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)   // applies to the entire class
+
+    public Response getStudentById(@PathParam("id") Long id) {
+        Student student = studentRepository.findById(id);
+        if (student == null)
+            return Response.ok(Response.status(Response.Status.NOT_FOUND)).build();
+        else
+            return Response.ok(student).build();
+    }
+
+
+    @GET
+    @Path("/student/{id}")
+    @Transactional
+    public Response getStudentById(@PathParam("id") Long id) {
+        Student student = studentRepository.findById(id);
+        if (student == null)
+            return Response.ok(Response.status(Response.Status.NOT_FOUND)).build();
+        else
+            return Response.ok(student).build();
+    }
+
+    @GET
+    @Path("getAllStudent")
+    @Transactional
+    public Response getAllStudentList() {
+        return Response.ok(studentRepository.listAll()).build();
+    }
+
 
 }
 

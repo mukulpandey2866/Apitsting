@@ -10,16 +10,16 @@ import javax.annotation.processing.Generated;
 public class Student {
     @Id
     @GeneratedValue
-    Long studenStudentId;
+    Long StudentId;
     String name;
     String branch;
 
-    public Long getStudenStudentId() {
-        return studenStudentId;
+    public Long getStudentId() {
+        return StudentId;
     }
 
-    public void setStudenStudentId(Long studenStudentId) {
-        this.studenStudentId = studenStudentId;
+    public void setStudentId(Long StudentId) {
+        this.StudentId = StudentId;
     }
 
     public String getName() {

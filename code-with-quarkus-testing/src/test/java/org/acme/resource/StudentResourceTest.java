@@ -4,15 +4,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.hamcrest.CoreMatchers;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+
 import static org.hamcrest.CoreMatchers.*;
 
 @QuarkusTest
 @Tag("integreation")
-@Path("/")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StudentResourceTest {
 
   @Test
@@ -40,6 +48,39 @@ class StudentResourceTest {
         .then()
         .body("size()", equalTo(2))
         .body("name", hasItems("John Doe", "Jane Doe"));
+  }
+
+  @Order(1)
+  @Test
+  void addStudent() {
+    JsonObject jsonObject = Json.createObjectBuilder()
+        .add("studentId",10L)
+        .add("name","Elon Musk")
+        .add("branch", "CS")
+        .build();
+
+    RestAssured.given()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(jsonObject.toString())
+        .when()
+        .post("addStudent")
+        .then()
+        .statusCode(Response.Status.CREATED.getStatusCode());
+
+  }
+
+  @Order(2)
+  @Test
+  void getStudentById() {
+
+
+    RestAssured.given()
+               .when()
+               .get("/student/10L")
+               .then()
+               .body("StudentId", equalTo(10))
+               .body("name", equalTo("Elon Musk"))
+               .body("branch", equalTo("CS"));
   }
 
 }
