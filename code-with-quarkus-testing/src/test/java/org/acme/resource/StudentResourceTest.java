@@ -72,8 +72,6 @@ class StudentResourceTest {
   @Order(2)
   @Test
   void getStudentById() {
-
-
     RestAssured.given()
                .when()
                .get("/student/10L")
@@ -83,4 +81,15 @@ class StudentResourceTest {
                .body("branch", equalTo("CS"));
   }
 
-}
+  @Order(3)
+  @Test
+  void getAllStudentList() {
+    RestAssured.given()
+               .when()
+               .get("getStudentList")
+               .then()
+               .body("size()", equalTo(6));
+  }
+
+} //add quarkus h2 depedency
+// write test cases for PUT(check with updated id) and DELETE(size-1).
