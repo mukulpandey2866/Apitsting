@@ -2,6 +2,8 @@ package org.acme.resource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.google.inject.Inject;
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import jakarta.json.Json;
@@ -9,7 +11,12 @@ import jakarta.json.JsonObject;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
+import org.acme.entity.Student;
+import org.acme.repository.StudentRepository;
 import org.hamcrest.CoreMatchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
@@ -22,6 +29,26 @@ import static org.hamcrest.CoreMatchers.*;
 @Tag("integreation")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StudentResourceTest {
+
+  @Inject// the class to test
+  StudentResource studentResource;
+
+  @InjectMock // the class whose methods are to be avoided.
+  StudentRepository studentRepository;
+
+  Student student;
+  @BeforeEach
+  void setup() {
+    student = new Student();
+    student.setName("John");
+    student.setBranch("EE");
+
+  }
+
+
+
+
+
 
   @Test
   void getStudentList() {
@@ -89,6 +116,44 @@ class StudentResourceTest {
                .get("getStudentList")
                .then()
                .body("size()", equalTo(6));
+  }
+
+
+
+
+
+
+
+  @Test
+  void createStudent() {
+  }
+
+  @Test
+  void getAllStudent() {
+
+    List<Student> studentList = new ArrayList<>();
+    studentList.add(new Student(1L,"Shruti","CS"));
+    studentList.add(new Student(2L,"Rahul","CS"));
+    studentList.add(new Student(3L,"Akansha","CS"));
+
+    Mockito.when(studentRepository.listAll()).thenReturn(studentList);
+
+  }
+
+  @Test
+  void getCSStudentList() {
+  }
+
+  @Test
+  void testGetStudentById() {
+  }
+
+  @Test
+  void updateStudent() {
+  }
+
+  @Test
+  void testUpdateStudent() {
   }
 
 } //add quarkus h2 depedency

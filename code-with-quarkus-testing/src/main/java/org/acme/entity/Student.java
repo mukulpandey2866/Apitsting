@@ -8,11 +8,23 @@ import javax.annotation.processing.Generated;
 
 @Entity
 public class Student {
+
+
+
     @Id
     @GeneratedValue
     Long StudentId;
     String name;
     String branch;
+
+    public Student() {
+    }
+
+    public Student(Long studentId, String name, String branch) {
+        StudentId = studentId;
+        this.name = name;
+        this.branch = branch;
+    }
 
     public Long getStudentId() {
         return StudentId;
